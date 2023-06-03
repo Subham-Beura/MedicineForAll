@@ -6,9 +6,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const cors_1 = __importDefault(require("cors"));
+const body_parser_1 = __importDefault(require("body-parser"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 4000;
+app.use(cors_1.default);
+app.use(body_parser_1.default.json());
 try {
     const dbURL = process.env.DB_URL;
     mongoose_1.default.connect(dbURL);
@@ -20,4 +24,4 @@ catch (error) {
 app.get("/", (req, res) => {
     res.send("Hello World");
 });
-app.listen(port, () => console.log("Server is on!!"));
+app.listen(port, () => console.log("⚡️⚡️⚡️⚡️⚡️   Server is on!!"));
