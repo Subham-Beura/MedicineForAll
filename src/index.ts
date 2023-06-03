@@ -5,10 +5,12 @@ import cors from "cors";
 import bodyParser from "body-parser";
 dotenv.config();
 
+import authRouter from "./routes/authRoutes";
+
 const app: Express = express();
 const port = process.env.PORT || 4000;
 
-app.use(cors);
+app.use(cors());
 app.use(bodyParser.json());
 try {
   const dbURL = process.env.DB_URL as string;
@@ -22,4 +24,6 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World");
 });
 
-app.listen(port, () => console.log("⚡️⚡️⚡️⚡️⚡️   Server is on!!"));
+app.use("/auth", authRouter);
+
+app.listen(port, () => console.log("⚡️⚡️⚡️⚡️⚡️   Server is on!!" + port));
