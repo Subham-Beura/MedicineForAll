@@ -1,0 +1,124 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl         = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
+}
+
+model User {
+  id          String    @id @default(uuid())
+  email_id    String    @unique
+  password    String
+  first_name  String
+  middle_name String
+  last_name   String
+  address     Address[]
+  Carts       Cart[]
+  Orders      Orders[]
+}
+
+model Address {
+  id           String @id @default(uuid())
+  addressLine1 String
+  addressLine2 String
+  locality     String
+  city         String
+  state        String
+  country      String
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  Shop   Shop?   @relation(fields: [shopId], references: [id])
+  shopId String? @unique
+
+  companyId String?  @unique
+  Company   Company? @relation(fields: [companyId], references: [id])
+}
+
+model Medicine {
+  id              String            @id @default(uuid())
+  name            String
+  rating          Int
+  Company         Company           @relation(fields: [companyId], references: [id])
+  MedicineInShops MedicineInShops[]
+  companyId       String
+}
+
+model MedicineInShops {
+  id             String      @id @default(uuid())
+  medicine       Medicine    @relation(fields: [medicineId], references: [id])
+  medicineId     String
+  shop           Shop        @relation(fields: [shopId], references: [id])
+  shopId         String
+  stock          Int
+  price          Int
+  presentInCarts CartItems[]
+}
+
+model Shop {
+  id              String            @id @default(uuid())
+  name            String
+  MedicineInShops MedicineInShops[]
+  Address         Address?
+  rating          Int
+}
+
+model Company {
+  id       String     @id @default(uuid())
+  name     String
+  address  Address?
+  Medicine Medicine[]
+}
+
+model Cart {
+  id        String      @id @default(uuid())
+  user      User        @relation(fields: [userId], references: [id])
+  userId    String
+  CartItems CartItems[]
+
+  Orders Orders?
+}
+
+model CartItems {
+  id                String          @id @default(uuid())
+  Cart              Cart            @relation(fields: [cartId], references: [id])
+  cartId            String
+  medicinesInShops  MedicineInShops @relation(fields: [medicineInShopsId], references: [id])
+  medicineInShopsId String
+}
+
+model Orders {
+  id             String       @id @default(uuid())
+  user           User         @relation(fields: [userId], references: [id])
+  userId         String
+  Cart           Cart         @relation(fields: [cartId], references: [id])
+  cartId         String       @unique
+  isDelivered    Boolean      @default(false)
+  Transaction    Transactions @relation(fields: [transactionsId], references: [id])
+  transactionsId String       @unique
+  Delivery       Delivery?
+}
+
+model Transactions {
+  id      String   @id @default(uuid())
+  order   Orders?
+  orderId String?
+  amount  Int
+  date    DateTime @default(now())
+  success Boolean
+}
+
+model Delivery {
+  id       String   @id @default(uuid())
+  Order    Orders   @relation(fields: [ordersId], references: [id])
+  ordersId String   @unique
+  ETA      DateTime
+}
