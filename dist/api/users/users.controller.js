@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = exports.register = void 0;
+exports.getAllUsers = exports.login = exports.register = void 0;
 // import bcrypt from "bcrypt";
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const client_1 = require("@prisma/client");
@@ -87,32 +87,17 @@ function login(req, res) {
     });
 }
 exports.login = login;
-// export async function getAllUsers(req: Request, res: Response) {
-//   let allUsers = await User.find();
-//   return res.json({ allUsers, success: true });
-// }
-// export async function changePassword(req: Request, res: Response) {
-//   const data = req.body;
-//   const emp_id = req.params.emp_id;
-//   console.log(emp_id);
-//   let user = await User.findOne({ emp_id })!;
-//   if (user?.password != data.oldPassword)
-//     return res.json({
-//       success: false,
-//       msg: "Wrong Password",
-//     });
-//   // if (!bcrypt.compare(user?.password!, data.oldPassword))
-//   //   console.log("Wrong Password");
-//   // const salt = await bcrypt.genSalt(10);
-//   // const hash: string = await bcrypt.hash(data.newPassword1, salt);
-//   let newUser = user;
-//   newUser!.password = data.newPassword1;
-//   // newUser!.password = hash;
-//   const doc = new User(newUser);
-//   console.log(doc);
-//   let saved = await doc.save();
-//   return res.json({
-//     success: true,
-//     msg: "Password Changed",
-//   });
-// }
+function getAllUsers(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            let allUsers = yield prisma.user.findMany();
+            return res.status(200).json({ allUsers, success: true });
+        }
+        catch (error) {
+            res
+                .status(500)
+                .json({ success: false, error: error, msg: "Something went wrong" });
+        }
+    });
+}
+exports.getAllUsers = getAllUsers;

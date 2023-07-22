@@ -15,6 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 const app_1 = __importDefault(require("../../app"));
 describe("Auth Routest", () => {
+    let jwt = "";
+    beforeAll(getJWT());
+    it("JWT is OK", () => {
+        expect(jwt).not.toBe("");
+    });
     describe("Login", () => {
         it("should return 200", () => __awaiter(void 0, void 0, void 0, function* () {
             const response = yield (0, supertest_1.default)(app_1.default).post("/auth/login").send({
@@ -38,4 +43,28 @@ describe("Auth Routest", () => {
             // expect(response.status).toBe(201);
         }));
     });
+    describe("GET /auth/", () => {
+        it("should return 200", () => __awaiter(void 0, void 0, void 0, function* () {
+            const response = yield (0, supertest_1.default)(app_1.default)
+                .get("/auth/")
+                .send()
+                .set("Authorization", "Bearer " + jwt);
+            expect(response.status).toBe(200);
+        }));
+        it("should have an list", () => __awaiter(void 0, void 0, void 0, function* () {
+            const response = yield (0, supertest_1.default)(app_1.default)
+                .get("/auth/")
+                .send()
+                .set("Authorization", "Bearer " + jwt);
+            expect(response.body.allUsers).toBeInstanceOf(Array);
+        }));
+    });
+    function getJWT() {
+        return () => __awaiter(this, void 0, void 0, function* () {
+            const res = yield (0, supertest_1.default)(app_1.default)
+                .post("/auth/login")
+                .send({ email_id: "s2@b.com", password: "XXXXXX" });
+            jwt = res.body.token;
+        });
+    }
 });

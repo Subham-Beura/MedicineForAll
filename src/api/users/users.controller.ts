@@ -71,34 +71,13 @@ export async function login(req: Request, res: Response) {
     res.status(500).json(error);
   }
 }
-// export async function getAllUsers(req: Request, res: Response) {
-//   let allUsers = await User.find();
-//   return res.json({ allUsers, success: true });
-// }
-
-// export async function changePassword(req: Request, res: Response) {
-//   const data = req.body;
-//   const emp_id = req.params.emp_id;
-//   console.log(emp_id);
-//   let user = await User.findOne({ emp_id })!;
-//   if (user?.password != data.oldPassword)
-//     return res.json({
-//       success: false,
-//       msg: "Wrong Password",
-//     });
-//   // if (!bcrypt.compare(user?.password!, data.oldPassword))
-//   //   console.log("Wrong Password");
-//   // const salt = await bcrypt.genSalt(10);
-//   // const hash: string = await bcrypt.hash(data.newPassword1, salt);
-//   let newUser = user;
-//   newUser!.password = data.newPassword1;
-//   // newUser!.password = hash;
-//   const doc = new User(newUser);
-//   console.log(doc);
-//   let saved = await doc.save();
-
-//   return res.json({
-//     success: true,
-//     msg: "Password Changed",
-//   });
-// }
+export async function getAllUsers(req: Request, res: Response) {
+  try {
+    let allUsers = await prisma.user.findMany();
+    return res.status(200).json({ allUsers, success: true });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, error: error, msg: "Something went wrong" });
+  }
+}
