@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
 import { PrismaClient } from "@prisma/client";
-import { SECRET_KEY } from "../middlewares/auth";
+import { SECRET_KEY } from "../../middlewares/auth";
 export const prisma = new PrismaClient();
 
 export async function register(req: Request, res: Response) {

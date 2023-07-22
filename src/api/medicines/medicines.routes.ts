@@ -6,7 +6,7 @@ import {
   getMedicineById,
   updateMedicine,
 } from "./medicines.controller";
-import { auth } from "../middlewares/auth";
+import { auth } from "../../middlewares/auth";
 const router = Router();
 
 router.get("/", getAllMedicines);

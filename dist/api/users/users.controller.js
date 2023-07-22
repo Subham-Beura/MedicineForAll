@@ -16,7 +16,7 @@ exports.getAllUsers = exports.login = exports.register = exports.prisma = void 0
 // import bcrypt from "bcrypt";
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const client_1 = require("@prisma/client");
-const auth_1 = require("../middlewares/auth");
+const auth_1 = require("../../middlewares/auth");
 exports.prisma = new client_1.PrismaClient();
 function register(req, res) {
     return __awaiter(this, void 0, void 0, function* () {

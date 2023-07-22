@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { TokenRequest } from "../middlewares/auth";
+import { TokenRequest } from "../../middlewares/auth";
 import { prisma } from "../users/users.controller";
 
 export const getAddressList = async (req: Request, res: Response) => {
