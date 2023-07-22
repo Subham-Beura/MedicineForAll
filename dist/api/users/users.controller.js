@@ -12,12 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllUsers = exports.login = exports.register = void 0;
+exports.getAllUsers = exports.login = exports.register = exports.prisma = void 0;
 // import bcrypt from "bcrypt";
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const client_1 = require("@prisma/client");
 const auth_1 = require("../middlewares/auth");
-const prisma = new client_1.PrismaClient();
+exports.prisma = new client_1.PrismaClient();
 function register(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -27,7 +27,7 @@ function register(req, res) {
             // const hash = await bcrypt.hash(newUser.password, salt);
             // newUser.password = hash;
             // Saving in DB
-            const User = yield prisma.user.create({ data: newUser });
+            const User = yield exports.prisma.user.create({ data: newUser });
             return res.status(201).json({
                 success: true,
                 msg: "saved",
@@ -47,7 +47,7 @@ function login(req, res) {
             console.log("Some tried to log in");
             const { email_id, password } = req.body;
             console.log(email_id);
-            let userExists = yield prisma.user.findUnique({
+            let userExists = yield exports.prisma.user.findUnique({
                 where: { email_id: email_id },
             });
             // Username Not Found
@@ -67,7 +67,7 @@ function login(req, res) {
             // Token Creation
             if (!auth_1.SECRET_KEY)
                 throw new Error("JWT_KEY must be defined");
-            const token = jsonwebtoken_1.default.sign({ emp_id: userExists.id.toString() }, auth_1.SECRET_KEY, {
+            const token = jsonwebtoken_1.default.sign({ id: userExists.id.toString() }, auth_1.SECRET_KEY, {
                 expiresIn: "24 hours",
             });
             const secondsInOneDay = 60 * 60 * 24;
@@ -90,7 +90,7 @@ exports.login = login;
 function getAllUsers(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            let allUsers = yield prisma.user.findMany();
+            let allUsers = yield exports.prisma.user.findMany();
             return res.status(200).json({ allUsers, success: true });
         }
         catch (error) {

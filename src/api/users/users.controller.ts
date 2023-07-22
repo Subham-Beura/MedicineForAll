@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 import { PrismaClient } from "@prisma/client";
 import { SECRET_KEY } from "../middlewares/auth";
-const prisma = new PrismaClient();
+export const prisma = new PrismaClient();
 
 export async function register(req: Request, res: Response) {
   try {
@@ -54,7 +54,7 @@ export async function login(req: Request, res: Response) {
 
     // Token Creation
     if (!SECRET_KEY) throw new Error("JWT_KEY must be defined");
-    const token = jwt.sign({ emp_id: userExists.id.toString() }, SECRET_KEY, {
+    const token = jwt.sign({ id: userExists.id.toString() }, SECRET_KEY, {
       expiresIn: "24 hours",
     });
     const secondsInOneDay = 60 * 60 * 24;
