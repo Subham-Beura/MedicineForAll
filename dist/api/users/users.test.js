@@ -17,11 +17,25 @@ const app_1 = __importDefault(require("../../app"));
 describe("Auth Routest", () => {
     describe("Login", () => {
         it("should return 200", () => __awaiter(void 0, void 0, void 0, function* () {
-            const response = yield (0, supertest_1.default)(app_1.default).post("/api/auth/login").send({
-                email: "XXXXXXXXXXXXX",
-                password: "XXXXXXXX",
+            const response = yield (0, supertest_1.default)(app_1.default).post("/auth/login").send({
+                email_id: "s@b.com",
+                password: "Subham",
             });
+            expect(response.body.success).toBe(true);
             expect(response.status).toBe(200);
+        }));
+    });
+    describe("POST /auth/register", () => {
+        it("should return 201 on creation", () => __awaiter(void 0, void 0, void 0, function* () {
+            // const response = await request(app).post("/auth/register").send({
+            //   email_id: "s2@b.com",
+            //   password: "XXXXXX",
+            //   first_name: "XXXXXX",
+            //   middle_name: "",
+            //   last_name: "XXXXX",
+            // });
+            // // expect(response.body.success).toBe(true);
+            // expect(response.status).toBe(201);
         }));
     });
 });
