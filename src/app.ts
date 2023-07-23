@@ -8,6 +8,7 @@ import addressRoutes from "./api/address/address.routes";
 import medicinesRoutes from "./api/medicines/medicines.routes";
 import shopsRoutes from "./api/shop/shop.routes";
 import searchRoutes from "./api/search/search.routes";
+import cartRoutes from "./api/carts/carts.routes";
 
 dotenv.config();
 
@@ -22,4 +23,5 @@ app.use("/address", addressRoutes);
 app.use("/medicines", medicinesRoutes);
 app.use("/shops", shopsRoutes);
 app.use("/search", searchRoutes);
+app.use("/carts", cartRoutes);
 export default app;

@@ -12,6 +12,7 @@ const address_routes_1 = __importDefault(require("./api/address/address.routes")
 const medicines_routes_1 = __importDefault(require("./api/medicines/medicines.routes"));
 const shop_routes_1 = __importDefault(require("./api/shop/shop.routes"));
 const search_routes_1 = __importDefault(require("./api/search/search.routes"));
+const carts_routes_1 = __importDefault(require("./api/carts/carts.routes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 4000;
@@ -22,4 +23,5 @@ app.use("/address", address_routes_1.default);
 app.use("/medicines", medicines_routes_1.default);
 app.use("/shops", shop_routes_1.default);
 app.use("/search", search_routes_1.default);
+app.use("/carts", carts_routes_1.default);
 exports.default = app;
