@@ -59,3 +59,77 @@ export const deleteShop = async (req: Request, res: Response) => {
   }
 };
 
+export const getAllMedicinesByShop = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const medicines = await prisma.medicineInShops.findMany({
+      where: {
+        shopId: String(id),
+      },
+    });
+    res.status(200).json(medicines);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};
+export const addMedicineToShop = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const medicineStock = req.body;
+    const medicine = await prisma.medicineInShops.create({
+      data: {
+        ...medicineStock,
+        shopId: id,
+      },
+    });
+    res.json(medicine);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};
+export const getMedicineFromShopById = async (req: Request, res: Response) => {
+  try {
+    const { id: shopId, medicineInShopId } = req.params;
+    const medicine = await prisma.medicineInShops.findUnique({
+      where: {
+        id: medicineInShopId,
+      },
+    });
+    res.json(medicine);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};
+export const updateMedicineInShop = async (req: Request, res: Response) => {
+  try {
+    const { id, medicineId } = req.params;
+    const medicineStock = req.body;
+    const medicine = await prisma.medicineInShops.updateMany({
+      where: {
+        shopId: id,
+        medicineId: medicineId,
+      },
+      data: {
+        ...medicineStock,
+      },
+    });
+    res.json(medicine);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};
+export const deleteMedicineFromShop = (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { medicineId } = req.body;
+    const medicine = prisma.medicineInShops.deleteMany({
+      where: {
+        shopId: id,
+        medicineId: medicineId,
+      },
+    });
+    res.json(medicine);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+};

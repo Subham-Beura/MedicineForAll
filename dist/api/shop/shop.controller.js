@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteShop = exports.updateShop = exports.createShop = exports.getShopById = exports.getAllShops = void 0;
+exports.deleteMedicineFromShop = exports.updateMedicineInShop = exports.getMedicineFromShopById = exports.addMedicineToShop = exports.getAllMedicinesByShop = exports.deleteShop = exports.updateShop = exports.createShop = exports.getShopById = exports.getAllShops = void 0;
 const users_controller_1 = require("../users/users.controller");
 const getAllShops = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const shops = yield users_controller_1.prisma.shop.findMany();
@@ -75,3 +75,82 @@ const deleteShop = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.deleteShop = deleteShop;
+const getAllMedicinesByShop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const medicines = yield users_controller_1.prisma.medicineInShops.findMany({
+            where: {
+                shopId: String(id),
+            },
+        });
+        res.status(200).json(medicines);
+    }
+    catch (error) {
+        res.status(500).json({ error });
+    }
+});
+exports.getAllMedicinesByShop = getAllMedicinesByShop;
+const addMedicineToShop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const medicineStock = req.body;
+        const medicine = yield users_controller_1.prisma.medicineInShops.create({
+            data: Object.assign(Object.assign({}, medicineStock), { shopId: id }),
+        });
+        res.json(medicine);
+    }
+    catch (error) {
+        res.status(500).json({ error });
+    }
+});
+exports.addMedicineToShop = addMedicineToShop;
+const getMedicineFromShopById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id: shopId, medicineInShopId } = req.params;
+        const medicine = yield users_controller_1.prisma.medicineInShops.findUnique({
+            where: {
+                id: medicineInShopId,
+            },
+        });
+        res.json(medicine);
+    }
+    catch (error) {
+        res.status(500).json({ error });
+    }
+});
+exports.getMedicineFromShopById = getMedicineFromShopById;
+const updateMedicineInShop = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id, medicineId } = req.params;
+        const medicineStock = req.body;
+        const medicine = yield users_controller_1.prisma.medicineInShops.updateMany({
+            where: {
+                shopId: id,
+                medicineId: medicineId,
+            },
+            data: Object.assign({}, medicineStock),
+        });
+        res.json(medicine);
+    }
+    catch (error) {
+        res.status(500).json({ error });
+    }
+});
+exports.updateMedicineInShop = updateMedicineInShop;
+const deleteMedicineFromShop = (req, res) => {
+    try {
+        const { id } = req.params;
+        const { medicineId } = req.body;
+        const medicine = users_controller_1.prisma.medicineInShops.deleteMany({
+            where: {
+                shopId: id,
+                medicineId: medicineId,
+            },
+        });
+        res.json(medicine);
+    }
+    catch (error) {
+        res.status(500).json({ error });
+    }
+};
+exports.deleteMedicineFromShop = deleteMedicineFromShop;
