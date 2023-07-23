@@ -90,6 +90,7 @@ exports.login = login;
 function getAllUsers(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            console.log(req.body.token);
             let allUsers = yield exports.prisma.user.findMany();
             return res.status(200).json({ allUsers, success: true });
         }

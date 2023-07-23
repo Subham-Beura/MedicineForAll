@@ -13,6 +13,7 @@ const auth = (req, res, next) => {
         if (!token)
             throw new Error();
         const decoded = jsonwebtoken_1.default.verify(token, exports.SECRET_KEY);
+        req.body.token = decoded;
         req.token = decoded;
         next();
     }

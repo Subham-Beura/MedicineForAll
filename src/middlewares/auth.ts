@@ -11,6 +11,7 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
     const token = req.header("Authorization")?.replace("Bearer ", "");
     if (!token) throw new Error();
     const decoded = jwt.verify(token, SECRET_KEY!);
+    req.body.token = decoded;
     (req as TokenRequest).token = decoded;
     next();
   } catch (error) {

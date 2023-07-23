@@ -7,6 +7,7 @@ import authRoutes from "./api/users/users.routes";
 import addressRoutes from "./api/address/address.routes";
 import medicinesRoutes from "./api/medicines/medicines.routes";
 import shopsRoutes from "./api/shop/shop.routes";
+import searchRoutes from "./api/search/search.routes";
 
 dotenv.config();
 
@@ -20,4 +21,5 @@ app.use("/auth", authRoutes);
 app.use("/address", addressRoutes);
 app.use("/medicines", medicinesRoutes);
 app.use("/shops", shopsRoutes);
+app.use("/search", searchRoutes);
 export default app;
