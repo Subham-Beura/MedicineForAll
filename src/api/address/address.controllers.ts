@@ -12,13 +12,18 @@ export const getAddressList = async (req: Request, res: Response) => {
   res.json(addressList);
 };
 export const createAddress = async (req: Request, res: Response) => {
-  const { userId } = req.body;
-  if (!userId) return res.status(400).json({ message: "Invalid id" });
+  try {
+    const { userId, shopId, companyId } = req.body;
+    if (!userId && !companyId && !shopId)
+      return res.status(400).json({ message: "Invalid id" });
 
-  const address = await prisma.address.create({
-    data: {
-      ...req.body,
-    },
-  });
-  res.json(address);
+    const address = await prisma.address.create({
+      data: {
+        ...req.body,
+      },
+    });
+    res.json(address);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
 };

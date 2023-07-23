@@ -23,12 +23,17 @@ const getAddressList = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.getAddressList = getAddressList;
 const createAddress = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { userId } = req.body;
-    if (!userId)
-        return res.status(400).json({ message: "Invalid id" });
-    const address = yield users_controller_1.prisma.address.create({
-        data: Object.assign({}, req.body),
-    });
-    res.json(address);
+    try {
+        const { userId, shopId, companyId } = req.body;
+        if (!userId && !companyId && !shopId)
+            return res.status(400).json({ message: "Invalid id" });
+        const address = yield users_controller_1.prisma.address.create({
+            data: Object.assign({}, req.body),
+        });
+        res.json(address);
+    }
+    catch (error) {
+        res.status(500).json({ message: "Internal server error", error });
+    }
 });
 exports.createAddress = createAddress;
