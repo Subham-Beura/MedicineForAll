@@ -24,6 +24,12 @@ const getMedicineById = (req, res) => __awaiter(void 0, void 0, void 0, function
         where: {
             id: med_id,
         },
+        include: {
+            Company: true,
+            MedicineInShops: {
+                include: { shop: true },
+            },
+        },
     });
     if (!medicine)
         return res.status(404).json({ message: "Medicine not found" });
