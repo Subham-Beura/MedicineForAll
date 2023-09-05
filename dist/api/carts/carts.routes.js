@@ -5,7 +5,7 @@ const carts_controller_1 = require("./carts.controller");
 const router = (0, express_1.Router)();
 router.get("/:id", carts_controller_1.getItemsFromCart);
 router.post("/", carts_controller_1.createCart);
-router.put("/:cart_id", carts_controller_1.addItemsToCart);
+router.put("/:id", carts_controller_1.addItemsToCart);
 router.delete("/:cart_id/:item_id", carts_controller_1.removeItemsFromCart);
 router.post("/order", carts_controller_1.orderFromCart);
 exports.default = router;

@@ -9,7 +9,7 @@ import {
 const router = Router();
 router.get("/:id", getItemsFromCart);
 router.post("/", createCart);
-router.put("/:cart_id", addItemsToCart);
+router.put("/:id", addItemsToCart);
 router.delete("/:cart_id/:item_id", removeItemsFromCart);
 
 router.post("/order", orderFromCart);

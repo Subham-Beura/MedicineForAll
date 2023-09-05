@@ -13,12 +13,21 @@ exports.orderFromCart = exports.removeItemsFromCart = exports.addItemsToCart = e
 const users_controller_1 = require("../users/users.controller");
 const getItemsFromCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const cart = yield users_controller_1.prisma.cart.findMany({
+        const cart = yield users_controller_1.prisma.cart.findFirst({
             where: {
                 userId: req.params.id,
             },
             include: {
-                CartItems: true,
+                CartItems: {
+                    include: {
+                        medicinesInShops: {
+                            include: {
+                                shop: true,
+                                medicine: { include: { Company: true } },
+                            },
+                        },
+                    },
+                },
             },
         });
         res.status(200).json(cart);
@@ -42,9 +51,22 @@ const createCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.createCart = createCart;
 const addItemsToCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        let cart = yield users_controller_1.prisma.cart.findFirst({
+            where: {
+                userId: req.params.id,
+            },
+        });
+        let newCart;
+        // If cart doesn't exist, create a new one
+        if (!cart) {
+            newCart = yield users_controller_1.prisma.cart.create({
+                data: Object.assign({}, req.body),
+            });
+            cart = newCart;
+        }
         yield users_controller_1.prisma.cartItems.create({
             data: {
-                cartId: String(req.params.cart_id),
+                cartId: cart.id,
                 medicineInShopsId: String(req.body.medicineInShopsId),
             },
         });

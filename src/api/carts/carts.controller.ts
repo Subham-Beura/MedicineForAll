@@ -2,12 +2,21 @@ import { Request, Response } from "express";
 import { prisma } from "../users/users.controller";
 export const getItemsFromCart = async (req: Request, res: Response) => {
   try {
-    const cart = await prisma.cart.findMany({
+    const cart = await prisma.cart.findFirst({
       where: {
         userId: req.params.id,
       },
       include: {
-        CartItems: true,
+        CartItems: {
+          include: {
+            medicinesInShops: {
+              include: {
+                shop: true,
+                medicine: { include: { Company: true } },
+              },
+            },
+          },
+        },
       },
     });
     res.status(200).json(cart);
@@ -29,9 +38,25 @@ export const createCart = async (req: Request, res: Response) => {
 };
 export const addItemsToCart = async (req: Request, res: Response) => {
   try {
+    let cart = await prisma.cart.findFirst({
+      where: {
+        userId: req.params.id,
+      },
+    });
+    let newCart;
+    // If cart doesn't exist, create a new one
+    if (!cart) {
+      newCart = await prisma.cart.create({
+        data: {
+          ...req.body,
+        },
+      });
+      cart = newCart;
+    }
+
     await prisma.cartItems.create({
       data: {
-        cartId: String(req.params.cart_id),
+        cartId: cart.id,
         medicineInShopsId: String(req.body.medicineInShopsId),
       },
     });
