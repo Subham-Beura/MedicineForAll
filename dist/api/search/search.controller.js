@@ -14,8 +14,13 @@ const users_controller_1 = require("../users/users.controller");
 const searchMedicines = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const filter = req.body;
+        const name = req.body.name;
         const medicines = yield users_controller_1.prisma.medicine.findMany({
-            where: Object.assign({}, filter),
+            where: {
+                name: {
+                    search: name,
+                },
+            },
             include: {
                 MedicineInShops: {
                     include: {

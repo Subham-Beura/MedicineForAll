@@ -3,9 +3,12 @@ import { prisma } from "../users/users.controller";
 export const searchMedicines = async (req: Request, res: Response) => {
   try {
     const filter = req.body;
+    const name = req.body.name;
     const medicines = await prisma.medicine.findMany({
       where: {
-        ...filter,
+        name: {
+          search: name,
+        },
       },
       include: {
         MedicineInShops: {

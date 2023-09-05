@@ -1,5 +1,5 @@
 import { Router } from "express";
 import { searchMedicines } from "./search.controller";
 const router = Router();
-router.get("/", searchMedicines);
+router.post("/", searchMedicines);
 export default router;

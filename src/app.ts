@@ -9,6 +9,7 @@ import medicinesRoutes from "./api/medicines/medicines.routes";
 import shopsRoutes from "./api/shop/shop.routes";
 import searchRoutes from "./api/search/search.routes";
 import cartRoutes from "./api/carts/carts.routes";
+import { auth } from "./middlewares/auth";
 
 dotenv.config();
 
